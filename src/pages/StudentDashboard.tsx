@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { BookOpen, Video, GraduationCap, FileText, LogOut, TrendingUp } from 'lucide-react';
+import { QuizHistory } from '@/components/student/QuizHistory';
 
 export default function StudentDashboard() {
   const { user, signOut } = useAuth();
@@ -16,6 +17,7 @@ export default function StudentDashboard() {
     totalBooks: 0,
     totalVideos: 0,
   });
+  const [activeTab, setActiveTab] = useState('overview');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -156,61 +158,86 @@ export default function StudentDashboard() {
           </Card>
         </div>
 
-        {/* Quick Actions */}
-        <Card className="shadow-medium">
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Access your learning resources</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Button 
-                variant="outline" 
-                className="h-auto py-6 flex flex-col items-start gap-2"
-                onClick={() => navigate('/courses')}
-              >
-                <GraduationCap className="h-8 w-8 text-primary" />
-                <div className="text-left">
-                  <p className="font-semibold">Browse Courses</p>
-                  <p className="text-sm text-muted-foreground">Explore all available courses</p>
+        {/* Navigation Tabs */}
+        <div className="flex space-x-1 bg-muted p-1 rounded-lg mb-8">
+          <Button
+            variant={activeTab === 'overview' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('overview')}
+            className="flex-1"
+          >
+            Overview
+          </Button>
+          <Button
+            variant={activeTab === 'history' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('history')}
+            className="flex-1"
+          >
+            Quiz History
+          </Button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' && (
+          <>
+            {/* Quick Actions */}
+            <Card className="shadow-medium">
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+                <CardDescription>Access your learning resources</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button 
+                    variant="outline" 
+                    className="h-auto py-6 flex flex-col items-start gap-2"
+                    onClick={() => navigate('/courses')}
+                  >
+                    <GraduationCap className="h-8 w-8 text-primary" />
+                    <div className="text-left">
+                      <p className="font-semibold">Browse Courses</p>
+                      <p className="text-sm text-muted-foreground">Explore all available courses</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-auto py-6 flex flex-col items-start gap-2"
+                    onClick={() => navigate('/books')}
+                  >
+                    <BookOpen className="h-8 w-8 text-secondary" />
+                    <div className="text-left">
+                      <p className="font-semibold">My Library</p>
+                      <p className="text-sm text-muted-foreground">Access books and materials</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-auto py-6 flex flex-col items-start gap-2"
+                    onClick={() => navigate('/videos')}
+                  >
+                    <Video className="h-8 w-8 text-accent" />
+                    <div className="text-left">
+                      <p className="font-semibold">Video Lessons</p>
+                      <p className="text-sm text-muted-foreground">Watch educational videos</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-auto py-6 flex flex-col items-start gap-2"
+                    onClick={() => navigate('/quizzes')}
+                  >
+                    <FileText className="h-8 w-8 text-success" />
+                    <div className="text-left">
+                      <p className="font-semibold">Take Quizzes</p>
+                      <p className="text-sm text-muted-foreground">Test your knowledge</p>
+                    </div>
+                  </Button>
                 </div>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-auto py-6 flex flex-col items-start gap-2"
-                onClick={() => navigate('/books')}
-              >
-                <BookOpen className="h-8 w-8 text-secondary" />
-                <div className="text-left">
-                  <p className="font-semibold">My Library</p>
-                  <p className="text-sm text-muted-foreground">Access books and materials</p>
-                </div>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-auto py-6 flex flex-col items-start gap-2"
-                onClick={() => navigate('/videos')}
-              >
-                <Video className="h-8 w-8 text-accent" />
-                <div className="text-left">
-                  <p className="font-semibold">Video Lessons</p>
-                  <p className="text-sm text-muted-foreground">Watch educational videos</p>
-                </div>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-auto py-6 flex flex-col items-start gap-2"
-                onClick={() => navigate('/quizzes')}
-              >
-                <FileText className="h-8 w-8 text-success" />
-                <div className="text-left">
-                  <p className="font-semibold">Take Quizzes</p>
-                  <p className="text-sm text-muted-foreground">Test your knowledge</p>
-                </div>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {activeTab === 'history' && <QuizHistory />}
       </main>
     </div>
   );

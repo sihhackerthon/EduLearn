@@ -8,6 +8,9 @@ import { UploadBookDialog } from '@/components/admin/UploadBookDialog';
 import { UploadVideoDialog } from '@/components/admin/UploadVideoDialog';
 import { CreateCourseDialog } from '@/components/admin/CreateCourseDialog';
 import { CreateQuizDialog } from '@/components/admin/CreateQuizDialog';
+import { QuizAnalytics } from '@/components/admin/QuizAnalytics';
+import { UserStatistics } from '@/components/admin/UserStatistics';
+import { ContentManagement } from '@/components/admin/ContentManagement';
 
 export default function AdminDashboard() {
   const { user, signOut } = useAuth();
@@ -24,6 +27,7 @@ export default function AdminDashboard() {
   const [uploadVideoOpen, setUploadVideoOpen] = useState(false);
   const [createCourseOpen, setCreateCourseOpen] = useState(false);
   const [createQuizOpen, setCreateQuizOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -174,74 +178,101 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Content Management Actions */}
-        <Card className="shadow-medium">
-          <CardHeader>
-            <CardTitle>Content Management</CardTitle>
-            <CardDescription>Upload and manage learning materials</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Button 
-                className="h-auto py-6 flex flex-col items-center gap-2"
-                onClick={() => setUploadBookOpen(true)}
-              >
-                <Plus className="h-8 w-8" />
-                <div className="text-center">
-                  <p className="font-semibold">Upload Book</p>
-                  <p className="text-sm opacity-90">Add new book material</p>
+        {/* Navigation Tabs */}
+        <div className="flex space-x-1 bg-muted p-1 rounded-lg mb-8">
+          <Button
+            variant={activeTab === 'overview' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('overview')}
+            className="flex-1"
+          >
+            Overview
+          </Button>
+          <Button
+            variant={activeTab === 'analytics' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('analytics')}
+            className="flex-1"
+          >
+            Quiz Analytics
+          </Button>
+          <Button
+            variant={activeTab === 'users' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('users')}
+            className="flex-1"
+          >
+            User Statistics
+          </Button>
+          <Button
+            variant={activeTab === 'content' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('content')}
+            className="flex-1"
+          >
+            Content Management
+          </Button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' && (
+          <>
+            {/* Content Management Actions */}
+            <Card className="shadow-medium">
+              <CardHeader>
+                <CardTitle>Content Management</CardTitle>
+                <CardDescription>Upload and manage learning materials</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <Button 
+                    className="h-auto py-6 flex flex-col items-center gap-2"
+                    onClick={() => setUploadBookOpen(true)}
+                  >
+                    <Plus className="h-8 w-8" />
+                    <div className="text-center">
+                      <p className="font-semibold">Upload Book</p>
+                      <p className="text-sm opacity-90">Add new book material</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="secondary" 
+                    className="h-auto py-6 flex flex-col items-center gap-2"
+                    onClick={() => setUploadVideoOpen(true)}
+                  >
+                    <Plus className="h-8 w-8" />
+                    <div className="text-center">
+                      <p className="font-semibold">Upload Video</p>
+                      <p className="text-sm opacity-90">Add video lesson</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-auto py-6 flex flex-col items-center gap-2"
+                    onClick={() => setCreateCourseOpen(true)}
+                  >
+                    <Plus className="h-8 w-8" />
+                    <div className="text-center">
+                      <p className="font-semibold">Create Course</p>
+                      <p className="text-sm opacity-90">Build new course</p>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-auto py-6 flex flex-col items-center gap-2"
+                    onClick={() => setCreateQuizOpen(true)}
+                  >
+                    <Plus className="h-8 w-8" />
+                    <div className="text-center">
+                      <p className="font-semibold">Create Quiz</p>
+                      <p className="text-sm opacity-90">Design assessment</p>
+                    </div>
+                  </Button>
                 </div>
-              </Button>
-              <Button 
-                variant="secondary" 
-                className="h-auto py-6 flex flex-col items-center gap-2"
-                onClick={() => setUploadVideoOpen(true)}
-              >
-                <Plus className="h-8 w-8" />
-                <div className="text-center">
-                  <p className="font-semibold">Upload Video</p>
-                  <p className="text-sm opacity-90">Add video lesson</p>
-                </div>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-auto py-6 flex flex-col items-center gap-2"
-                onClick={() => setCreateCourseOpen(true)}
-              >
-                <Plus className="h-8 w-8" />
-                <div className="text-center">
-                  <p className="font-semibold">Create Course</p>
-                  <p className="text-sm opacity-90">Build new course</p>
-                </div>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-auto py-6 flex flex-col items-center gap-2"
-                onClick={() => setCreateQuizOpen(true)}
-              >
-                <Plus className="h-8 w-8" />
-                <div className="text-center">
-                  <p className="font-semibold">Create Quiz</p>
-                  <p className="text-sm opacity-90">Design assessment</p>
-                </div>
-              </Button>
-              <Button variant="outline" className="h-auto py-6 flex flex-col items-center gap-2">
-                <BookOpen className="h-8 w-8" />
-                <div className="text-center">
-                  <p className="font-semibold">Manage Content</p>
-                  <p className="text-sm opacity-90">Edit existing materials</p>
-                </div>
-              </Button>
-              <Button variant="outline" className="h-auto py-6 flex flex-col items-center gap-2">
-                <Users className="h-8 w-8" />
-                <div className="text-center">
-                  <p className="font-semibold">View Students</p>
-                  <p className="text-sm opacity-90">Monitor student progress</p>
-                </div>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {activeTab === 'analytics' && <QuizAnalytics />}
+        {activeTab === 'users' && <UserStatistics />}
+        {activeTab === 'content' && <ContentManagement />}
 
         <UploadBookDialog 
           open={uploadBookOpen} 
